@@ -1,0 +1,47 @@
+syntax = "proto3";
+
+package prefixservice;
+
+
+// The service definition; contains two rpc calls, one for querying and another
+// for adding name-score pairs to existing pairs.
+service PrefixService {
+  // Sends a list of `NameScorePair` for matching query string in request.
+  rpc ListTopScores (PrefixRequest) returns (PrefixResponse) {}
+  // Adds name-score pairs from request to existing pairs.
+  rpc AddWords (AddWordRequest) returns (AddWordResponse) {}
+}
+
+
+// Name-Score message. This is encapsulated in the `PrefixResponse` message
+// i.e., the response is a list of `NameScorePair`.
+message NameScorePair {
+  string name = 1;
+  int32 score = 2;
+}
+
+
+// The request sent by the client specifying the prefix.
+message PrefixRequest {
+  string query_string = 1;
+}
+
+
+// The response definition returning a list of `NameScorePair`.
+message PrefixResponse {
+  repeated NameScorePair NameScorePairs = 1;
+}
+
+
+// The request for adding a list of `NameScorePair`. This is useful for
+// adding words to your service i.e., usually clients can populate
+// prefixes by reading them from a file and then sending this message
+// to the server.
+message AddWordRequest {
+	repeated NameScorePair NameScorePairs = 1;
+}
+
+
+// Empty response for add a word.
+message AddWordResponse {
+}
